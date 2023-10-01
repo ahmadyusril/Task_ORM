@@ -18,5 +18,5 @@ export class Todos {
         type: "timestamp", 
         default: () => "CURRENT_TIMESTAMP"
     })
-        posted_at: Date
+        posted_at: Date;
 }
