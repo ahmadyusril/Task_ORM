@@ -1,24 +1,24 @@
 import { Request, Response } from "express";
-import TodosService from "../service/TodoService";
+import PaslonService from "../service/PaslonService";
 
 export default new (class TodoController {
   create(req: Request, res: Response) {
-    TodosService.create(req, res);
+    PaslonService.create(req, res);
   }
 
   find(req: Request, res: Response) {
-    TodosService.find(req, res);
+    PaslonService.find(req, res);
   }
 
   findById(req: Request, res: Response) {
-    TodosService.findById(req, res);
+    PaslonService.findById(req, res);
   }
 
   update(req: Request, res: Response) {
-    TodosService.update(req, res);
+    PaslonService.update(req, res);
   }
 
   delete(req: Request, res: Response) {
-    TodosService.delete(req, res);
+    PaslonService.delete(req, res);
   }
-});
+})();

@@ -1,7 +1,8 @@
-import * as express from "express"
-import { AppDataSource } from "./data-source"
-import router from "./route"
-import * as cors from "cors"
+import * as express from "express";
+import { AppDataSource } from "./data-source";
+import * as cors from "cors";
+import PaslonRoute from "./route/paslon";
+import VoteRoute from "./route/vote";
 
 AppDataSource.initialize()
     .then(async () => {
@@ -9,7 +10,8 @@ AppDataSource.initialize()
         const port = 5000;
 
         app.use(express.json());
-        app.use("/api/v1", router);
+        app.use("/api/v1", PaslonRoute);
+        app.use("/api/v1", VoteRoute);
 
         const options: cors.CorsOption = {
             allowedHeaders: ["X-Requested-With", "Content-Type", "Authorization"],

@@ -1,5 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
+import { Paslons } from "./entities/Paslon";
+import { Votes } from "./entities/Vote";
 
 export const AppDataSource = new DataSource({
     type: "postgres",

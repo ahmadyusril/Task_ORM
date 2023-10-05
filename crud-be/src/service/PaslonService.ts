@@ -1,19 +1,19 @@
 import { Repository } from "typeorm";
-import { Todos } from "../entities/Todo";
+import { Paslons } from "../entities/Paslon";
 import { AppDataSource } from "../data-source";
-import { createTodoSchema, updateTodoSchema } from "../utils/Todos";
+import { createPaslonSchema, updatePaslonSchema } from "../utils/Paslon";
 import { Request, Response } from "express";
 import { uploadToCloudinary } from "../utils/Cloudinary";
 import { deleteFile } from "../utils/FileHelper";
 
 export default new class PaslonService {
-  private readonly TodoRepository: Repository<Todos> = AppDataSource.getRepository(Todos);
+  private readonly TodoRepository: Repository<Paslons> = AppDataSource.getRepository(Paslons);
 
   async create(req: Request, res: Response): Promise<Response> {
     try {
       const data = req.body;
 
-      const { error } = createTodoSchema.validate(data);
+      const { error } = createPaslonSchema.validate(data);
       if (error) return res.status(400).json({ error: error });
 
       let image = "https://th.bing.com/th/id/OIP.yRWATHa-qR9c5mJAvpy0hQHaKZ?pid=ImgDet&rs=1"
@@ -65,7 +65,7 @@ export default new class PaslonService {
     try {
       const id = Number(req.params.id);
       const data = req.body;
-      const { error } = updateTodoSchema.validate(data);
+      const { error } = updatePaslonSchema.validate(data);
 
       if (error) return res.status(400).json({ Error: "Update error" });
 
@@ -85,7 +85,7 @@ export default new class PaslonService {
       const result = await this.TodoRepository.save(todo)
       return res.status(200).json(result)
     } catch (error) {
-      return res.status(500).json({ message: "Something error while update todo" });
+      return res.status(500).json({ message: "Something error while update paslon" });
     }
   }
 
@@ -98,7 +98,7 @@ export default new class PaslonService {
       await this.TodoRepository.delete(id);
       return res.status(200).json({ message: "Paslon succesfully deleted" });
     } catch (error) {
-      return res.status(500).json({ message: "Something error while delete todo" });
+      return res.status(500).json({ message: "Something error while delete paslon" });
     }
   }
 }
