@@ -1,12 +1,12 @@
 import * as express from 'express';
-import TodoController from '../controllers/PaslonController';
+import PaslonController from '../controllers/PaslonController';
 import UploadImage from '../middlewares/UploadImage';
 
 const PaslonRoute = express.Router();
-PaslonRoute.post('/paslons', UploadImage.single("image"), TodoController.create);
-PaslonRoute.get('/paslons', TodoController.find);
-PaslonRoute.patch("/paslon/:id", UploadImage.single("image"), TodoController.update);
-PaslonRoute.get("/paslon/:id", TodoController.findById);
-PaslonRoute.delete("/paslon/:id", TodoController.delete);
+PaslonRoute.post('/paslons', UploadImage.single("image"), PaslonController.create);
+PaslonRoute.get('/paslons', PaslonController.find);
+PaslonRoute.patch("/paslon/:id", UploadImage.single("image"), PaslonController.update);
+PaslonRoute.get("/paslon/:id", PaslonController.findById);
+PaslonRoute.delete("/paslon/:id", PaslonController.delete);
 
 export default PaslonRoute;

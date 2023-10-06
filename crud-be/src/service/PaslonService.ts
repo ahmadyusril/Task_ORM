@@ -7,7 +7,7 @@ import { uploadToCloudinary } from "../utils/Cloudinary";
 import { deleteFile } from "../utils/FileHelper";
 
 export default new class PaslonService {
-  private readonly TodoRepository: Repository<Paslons> = AppDataSource.getRepository(Paslons);
+  private readonly PaslonRepository: Repository<Paslons> = AppDataSource.getRepository(Paslons);
 
   async create(req: Request, res: Response): Promise<Response> {
     try {
@@ -23,13 +23,13 @@ export default new class PaslonService {
         // delete file from local server after save to cloudinary
         deleteFile(req.file.path);
       }
-      const obj = this.TodoRepository.create({
-        name: data.name,
+      const obj = this.PaslonRepository.create({
+        paslonName: data.paslonName,
         visi: data.visi,
         image: image
       });
 
-      const todos = this.TodoRepository.save(obj);
+      const paslons = this.PaslonRepository.save(obj);
       return res.status(200).json(obj);
     } catch (err) {
       return res.status(500).json({ Error: "error while inserting data" });
@@ -39,9 +39,9 @@ export default new class PaslonService {
 
   async find(req: Request, res: Response): Promise<Response> {
     try {
-      const todos = await this.TodoRepository.find({});
-      console.log(todos);
-      return res.status(200).json(todos);
+      const paslons = await this.PaslonRepository.find({});
+      console.log(paslons);
+      return res.status(200).json(paslons);
     } catch (error) {
       return res.status(500).json({ Error: "error while finding datas" });
     }
@@ -52,10 +52,10 @@ export default new class PaslonService {
       const id = Number(req.params.id);
       if (isNaN(id) || id <= 0) return res.status(400).json({ Error: "Invalid id" });
 
-      const todo = await this.TodoRepository.findOneBy({ id: Number(id) });
-      if (!todo) return res.status(404).json({ Error: "ID not found!" });
+      const paslon = await this.PaslonRepository.findOneBy({ id: Number(id) });
+      if (!paslon) return res.status(404).json({ Error: "ID not found!" });
 
-      return res.status(200).json(todo);
+      return res.status(200).json(paslon);
     } catch (error) {
       return res.status(500).json({ message: "Something error while findOne" });
     }
@@ -69,8 +69,8 @@ export default new class PaslonService {
 
       if (error) return res.status(400).json({ Error: "Update error" });
 
-      const todo = await this.TodoRepository.findOneBy({ id: Number(id) });
-      if (!todo) { return res.status(404).json({ Error: "ID not found" }) };
+      const paslon = await this.PaslonRepository.findOneBy({ id: Number(id) });
+      if (!paslon) { return res.status(404).json({ Error: "ID not found" }) };
 
       let image = "https://th.bing.com/th/id/OIP.yRWATHa-qR9c5mJAvpy0hQHaKZ?pid=ImgDet&rs=1"
       if (req.file?.filename) {
@@ -79,10 +79,10 @@ export default new class PaslonService {
         // delete file from local server after save to cloudinary
         deleteFile(req.file.path);
       }
-      todo.name = data.name
-      todo.visi = data.visi
-      todo.image = image
-      const result = await this.TodoRepository.save(todo)
+     paslon.paslonName = data.paslonName
+     paslon.visi = data.visi
+     paslon.image = image
+      const result = await this.PaslonRepository.save(paslon)
       return res.status(200).json(result)
     } catch (error) {
       return res.status(500).json({ message: "Something error while update paslon" });
@@ -92,10 +92,10 @@ export default new class PaslonService {
   async delete(req: Request, res: Response): Promise<Response> {
     try {
       const id = Number(req.params.id);
-      const todo = await this.TodoRepository.findOneBy({ id: Number(id) });
-      if (!todo) { return res.status(404).json({ Error: "ID not found!" }) };
+      const paslon = await this.PaslonRepository.findOneBy({ id: Number(id) });
+      if (!paslon) { return res.status(404).json({ Error: "ID not found!" }) };
 
-      await this.TodoRepository.delete(id);
+      await this.PaslonRepository.delete(id);
       return res.status(200).json({ message: "Paslon succesfully deleted" });
     } catch (error) {
       return res.status(500).json({ message: "Something error while delete paslon" });

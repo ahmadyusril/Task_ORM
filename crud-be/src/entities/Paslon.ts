@@ -5,9 +5,12 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     OneToMany,
+    ManyToMany,
+    JoinTable,
 } from "typeorm";
 
 import { Votes } from "./Vote";
+import { Party } from "./Party";
 
 @Entity({ name: "paslon" })
 export class Paslons {
@@ -15,7 +18,7 @@ export class Paslons {
     id: number;
 
     @Column({ nullable: true })
-    name: string;
+    paslonName: string;
 
     @Column({ nullable: true })
     visi: string;
@@ -31,4 +34,8 @@ export class Paslons {
   
     @OneToMany(() => Votes, (votes) => votes.paslon)
     votes: Votes[];
+
+    @ManyToMany(() => Party, (party) => party.paslon)
+    @JoinTable()
+    parties:Party[];
 }

@@ -4,25 +4,26 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
-    ManyToOne,
+    ManyToMany,
 } from "typeorm";
 
 import { Paslons } from "./Paslon";
 
-@Entity({ name: "vote" })
-export class Votes {
+@Entity({ name: "party" })
+export class Party {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ length: 55 })
-    voterName: string;
+    partyName: string;
 
-    @CreateDateColumn({ type: "timestamp with time zone" })
+    @CreateDateColumn({ type: "timestamp with time zone"})
     createdAt: Date;
 
     @UpdateDateColumn({ type: "timestamp with time zone" })
     updatedAt: Date;
 
-    @ManyToOne(() => Paslons, (paslons) => paslons.votes)
-    paslon: Paslons;
+    @ManyToMany(() => Paslons, (paslons) => paslons.votes)
+    paslon: Paslons[]
+
 }
