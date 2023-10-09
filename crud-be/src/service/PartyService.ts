@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { Party } from "../entities/Party";
 import { AppDataSource } from "../data-source";
-import { createPartySchema } from "../utils/Party";
+import { createPartySchema,updatePartySchema } from "../utils/Party";
 import { Request, Response } from "express";
 
 export default new class PartyService {
@@ -15,10 +15,11 @@ export default new class PartyService {
             const { error } = createPartySchema.validate(data);
             if (error) return res.status(400).json({ error: error });
 
-            const newParty = await this.PartyRepository.create({
+            const newParty = this.PartyRepository.create({
                 partyName: data.partyName
             });
 
+            const parties = this.PartyRepository.save(newParty);
             return res.status(200).json(newParty);
         }   catch (err) {
             return res.status(500).json({ Error: "error while inserting party" });
@@ -41,10 +42,10 @@ export default new class PartyService {
             const id = Number(req.params.id);
             if (isNaN(id) || id <= 0) return res.status(400).json({ Error: "Invalid id" });
 
-            const partyDetail = await this.PartyRepository.findOneBy({ id: Number(id) });
-            if (!partyDetail) return res.status(404).json({ Error: "Party not found!" });
+            const parties = await this.PartyRepository.findOneBy({ id: Number(id) });
+            if (!parties) return res.status(404).json({ Error: "Party not found!" });
 
-            return res.status(200).json(partyDetail);
+            return res.status(200).json(parties);
         }   catch (error) {
             return res.status(500).json({ message: "Something error while find party" });
         }
@@ -54,22 +55,20 @@ export default new class PartyService {
         try {
             const id = Number(req.params.id);
             const data = req.body;
-            const { error } = createPartySchema.validate(data);
-
+            const { error } = updatePartySchema.validate(data);
+            console.log(error);
             if (error) return res.status(400).json({ Error: "Update error" });
 
-            const partyDetail = await this.PartyRepository.findOneBy({ id: Number(id) });
-            if (!partyDetail) { return res.status(404).json({ Error: "Party not found" }) };
+            const parties = await this.PartyRepository.findOneBy({ id: Number(id) });
+            if (!parties) { return res.status(404).json({ Error: "Party not found" }) };
 
- 
-            const editedParty = await this.PartyRepository.query(
-                `UPDATE "party" SET name=$1, "updatedAt"=$2 WHERE id=$3 RETURNING id, partyName, "createdAt" as created_at, "updatedAt" as updated_at`,
-                [data.partyName, new Date(), id]
-              );
+            parties.partyName = data.partyName
 
-            const result = await this.PartyRepository.save(editedParty)
+            const result = await this.PartyRepository.save(parties)
+            console.log(result);
             return res.status(200).json(result)
         }   catch (error) {
+            console.log(error);
             return res.status(500).json({ message: "Something error while update party" });
         }
     }
@@ -83,6 +82,7 @@ export default new class PartyService {
             await this.PartyRepository.delete(id);
             return res.status(200).json({ message: "Party has been succesfully deleted" });
         }   catch (error) {
+            console.log(error);
             return res.status(500).json({ message: "Something error while delete party" });
         }
     }

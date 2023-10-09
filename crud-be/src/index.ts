@@ -8,7 +8,7 @@ import PartyRoute from "./route/party";
 AppDataSource.initialize()
     .then(async () => {
         const app = express();
-        const port = 5000;
+        const port = 8000;
 
         app.use(express.json());
         app.use("/api/v1", PaslonRoute);
